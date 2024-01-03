@@ -15,13 +15,9 @@ class BookController extends Controller
 
     public function index()
     {
-        if (Auth::check()) {
-            $books = Book::all();
-            $categories = Category::all();
-            return view('books.index', compact('books', 'categories'));
-        } else {
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
-        }
+        $books = Book::all();
+        $categories = Category::all();
+        return view('books.index', compact('books', 'categories'));
     }
 
 
@@ -44,45 +40,62 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        $book = new Book($request->all());
-       
+        $user = $request->user(); 
+        try {
+            $bookData = $request->all();
+            $bookData['user_id'] = $user->id; 
 
-        try{
-            $request->user()->books()->create($request->all());
+           
+
+            $book = $user->books()->create($bookData);
+
             $bookFile = $request->file('book_file');
             $book->book_file = time() . '_' . $bookFile->getClientOriginalName();
             $bookFile->storeAs('public/books', $book->book_file);
-    
+
             $coverImage = $request->file('cover_image');
             $book->cover_image = time() . '_' . $coverImage->getClientOriginalName();
             $coverImage->storeAs('public/covers', $book->cover_image);
-    
+            
             $book->save();
-    
             return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan');
         } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+            dd('Exception caught: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
-      
     }
 
     public function edit(Book $book)
     {
+        // dd('Sebelum edit'); // Tambahkan ini
         if (Gate::allows('update-book', $book)) {
             $categories = Category::all();
+            // dd('Sebelum edit');
+            try{
+                
             return view('books.edit', compact('book', 'categories'));
+            }
+            catch (\Illuminate\Database\QueryException $e) {
+                dd('Query Exception caught: ' . $e->getMessage());
+            }
+            catch (\Illuminate\Validation\ValidationException $e) {
+                dd('Validation Exception caught: ' . $e->getMessage());
+            }
+            //  dd('setelah edit');
         } else {
+            dd('error');
             abort(403, 'Unauthorized action.');
         }
     }
 
     public function update(BookRequest $request, Book $book)
     {
-        if (Gate::allows('update-book', $book)) {
+        try {
             $book->update($request->all());
             return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui');
-        } else {
-            abort(403, 'Unauthorized action.');
+        } catch (\Exception $e) {
+            // Jika terjadi kesalahan, tampilkan pesan kesalahan dan abort
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
     

@@ -16,6 +16,7 @@ class Book extends Model
         'quantity',
         'book_file',
         'cover_image',
+        'user_id'
     ];
 
     public function category()

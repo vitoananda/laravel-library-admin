@@ -6,10 +6,10 @@
     <title>Library Admin</title>
     <!-- Tambahkan referensi Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xxxxxx" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" />
     <script src="https://kit.fontawesome.com/1f00b848b3.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"crossorigin="anonymous"></script>
 </head>
 </head>
 <body>

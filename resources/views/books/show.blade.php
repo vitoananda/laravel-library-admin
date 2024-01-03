@@ -3,13 +3,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 class="mt-3">{{ $title }}</h1>
+<div class="my-3">
+    <a href="{{ route('books.index') }}">
+        <i class="fas fa-arrow-left fa-xl"></i> 
+    </a>
+        <h3 class="mt-3 mb-3">{{ $title }}</h3>
+    
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{ asset('storage/covers/' . $book->cover_image) }}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Judul : {{ $book->title }}</h5>
+              <p class="card-text">{{ $book->description }}</p>
+              <p class="card-text">Jumlah : {{ $book->quantity }}</p>
+              <a href="{{ asset('storage/books/' . $book->book_file) }}" class="btn btn-primary">File Buku</a>
+            </div>
+          </div>
+</div>
 
-    <div>
-        <h2>{{ $book->title }}</h2>
-        <p><strong>Kategori:</strong> {{ $book->category->name }}</p>
-        <p><strong>Deskripsi:</strong> {{ $book->description }}</p>
-        <p><strong>Jumlah:</strong> {{ $book->quantity }}</p>
-        <!-- Tambahkan informasi buku lainnya sesuai kebutuhan -->
-    </div>
+
+    
 @endsection
