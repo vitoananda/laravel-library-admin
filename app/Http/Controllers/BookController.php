@@ -7,6 +7,8 @@ use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\BookExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Gate; 
 
@@ -30,12 +32,9 @@ class BookController extends Controller
 
     public function create()
     {
-        if (Gate::allows('create-book')) {
-            $categories = Category::all();
-            return view('books.create', compact('categories'));
-        } else {
-            abort(403, 'Unauthorized action.');
-        }
+        $categories = Category::all();
+       return view('books.create', compact('categories'));
+      
     }
 
     public function store(BookRequest $request)
@@ -43,20 +42,17 @@ class BookController extends Controller
         $user = $request->user(); 
         try {
             $bookData = $request->all();
-            $bookData['user_id'] = $user->id; 
-
-           
-
+    
             $book = $user->books()->create($bookData);
-
+    
             $bookFile = $request->file('book_file');
             $book->book_file = time() . '_' . $bookFile->getClientOriginalName();
             $bookFile->storeAs('public/books', $book->book_file);
-
+    
             $coverImage = $request->file('cover_image');
             $book->cover_image = time() . '_' . $coverImage->getClientOriginalName();
             $coverImage->storeAs('public/covers', $book->cover_image);
-            
+    
             $book->save();
             return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan');
         } catch (\Exception $e) {
@@ -91,10 +87,22 @@ class BookController extends Controller
     public function update(BookRequest $request, Book $book)
     {
         try {
-            $book->update($request->all());
+            // Update other fields
+            $book->update($request->except('book_file', 'cover_image'));
+    
+            // Handle file uploads
+            if ($request->hasFile('book_file')) {
+                // Update book_file
+                // ...
+            }
+    
+            if ($request->hasFile('cover_image')) {
+                // Update cover_image
+                // ...
+            }
+    
             return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui');
         } catch (\Exception $e) {
-            // Jika terjadi kesalahan, tampilkan pesan kesalahan dan abort
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
@@ -107,5 +115,10 @@ class BookController extends Controller
         } else {
             abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new BookExport, 'books.xlsx');
     }
 }

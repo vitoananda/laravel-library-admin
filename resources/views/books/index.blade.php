@@ -3,6 +3,12 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div>
+    <a href="{{ route('books.export') }}" class="btn btn-success">
+        <i class="fas fa-file-excel"></i> Export to Excel
+    </a>
+</div>
     <h1 class="mt-3">Daftar Buku</h1>
     <a href="{{ route('books.create') }}" class="btn btn-primary mb-3">Tambah Buku</a>
 

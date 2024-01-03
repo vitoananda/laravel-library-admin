@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 
 /*
@@ -18,29 +18,34 @@ use App\Http\Controllers\Auth\LoginController;
 */
 
 // Welcome Controller
-Route::get('/', [LoginController::class, 'index'])->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Authentication Routes
+// Authentication 
 Auth::routes();
 
 // Home Controller
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Welcome Page
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Category Controller
 Route::resource('categories', CategoryController::class);
+
+//export 
+Route::get('/books/export', [BookController::class, 'export'])->name('books.export');
 
 // Book Controller
 Route::resource('books', BookController::class)->except(['update']);
 Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
 Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
 
+
 // Authentication Routes
 Auth::routes();
 
 // Home Controller
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Logout
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+

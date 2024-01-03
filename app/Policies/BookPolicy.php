@@ -7,10 +7,6 @@ use App\Models\Book;
 
 class BookPolicy
 {
-    public function create(User $user)
-    {
-        return $user->id !== 1; // Hanya izinkan user bukan admin untuk membuat buku
-    }
     
     public function update(User $user, Book $book)
     {

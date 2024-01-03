@@ -26,8 +26,8 @@ class BookRequest extends FormRequest
             'category_id' => 'required',
             'description' => 'required',
             'quantity' => 'required|integer',
-            'book_file' => 'required|mimes:pdf|max:10240',
-            'cover_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'book_file' => 'sometimes|required|mimes:pdf|max:10240',
+            'cover_image' => 'sometimes|required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }
